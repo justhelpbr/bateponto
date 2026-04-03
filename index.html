@@ -505,6 +505,23 @@ alter table absences disable row level security;</pre>
 
 </div><!-- #app -->
 
+<!-- MODAL: Admin Password -->
+<div class="overlay" id="mod-admin-pass">
+  <div class="modal" style="max-width:360px">
+    <h3>🔒 Acesso Restrito</h3>
+    <p style="font-size:13px;color:var(--mut);margin-bottom:20px">Digite a senha de administrador para continuar.</p>
+    <div class="field">
+      <label>Senha</label>
+      <input type="password" id="admin-pass-input" placeholder="••••••••" onkeydown="if(event.key==='Enter') checkAdminPass()" style="letter-spacing:3px;font-size:16px">
+    </div>
+    <div style="font-size:12px;color:var(--acc2);min-height:16px;margin-top:-8px;margin-bottom:12px" id="admin-pass-err"></div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeM('mod-admin-pass');document.getElementById('admin-pass-input').value=''">Cancelar</button>
+      <button class="btn btn-primary" onclick="checkAdminPass()">Entrar</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL: Falta -->
 <div class="overlay" id="mod-falta">
   <div class="modal">
@@ -852,7 +869,8 @@ async function submitFalta() {
 }
 
 // ── ADMIN ────────────────────────────────────
-function goAdmin() { showView('admin'); aTab('hoje'); }
+function goAdmin() { document.getElementById('admin-pass-input').value=''; document.getElementById('admin-pass-err').textContent=''; openM('mod-admin-pass'); setTimeout(()=>document.getElementById('admin-pass-input').focus(),100); }
+function checkAdminPass() { const v=document.getElementById('admin-pass-input').value; if(v==='Just1230@'){ closeM('mod-admin-pass'); document.getElementById('admin-pass-input').value=''; showView('admin'); aTab('hoje'); } else { document.getElementById('admin-pass-err').textContent='Senha incorreta.'; document.getElementById('admin-pass-input').value=''; document.getElementById('admin-pass-input').focus(); } }
 
 const tabTitles = { hoje:'Resumo do Dia', func:'Funcionários', banco:'Banco de Horas', hist:'Histórico de Ponto', faltas:'Registro de Faltas' };
 
